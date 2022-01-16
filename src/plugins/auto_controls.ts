@@ -15,8 +15,8 @@ const defaultOptions = Object.create({
  * 由于是单例，所以其属性是所有表单实例共享的
  * 自动获取表单控件
  */
-const AutoControlsPlugin: Plugin = {
-  name: "AutoControlsPlugin",
+const DefaultAutoControlsPlugin: Plugin = {
+  name: "DefaultAutoControlsPlugin",
   setup(context, opts) {
     opts = merge(Object.create(null), defaultOptions, opts);
     const validator = context.validator;
@@ -40,4 +40,4 @@ const AutoControlsPlugin: Plugin = {
   }
 };
 
-export default AutoControlsPlugin;
+export default DefaultAutoControlsPlugin;

@@ -15,7 +15,7 @@ interface Rule {
   param?: any;
 }
 
-interface RuleKeywords {
+export interface RuleKeywords {
   [name: string]: RuleHandler; // name是rule.name，值是rule.handler
 }
 

@@ -1,15 +1,18 @@
 import { Plugin } from '../FormValidator';
 import isEmpty from 'lodash/isEmpty';
+import { RuleKeywords } from '../FormValidationRuler';
+import isUndefined from 'lodash/isUndefined';
+import merge from 'lodash/merge';
 
 /**
- * 设置默认关键词规则
+ * 设置关键词规则
  */
 const DefaultRulerKeywordPlugin: Plugin = {
   name: 'DefaultRulerKeywordPlugin',
-  setup: function (context, opts) {
+  setup: function (context, opts: RuleKeywords) {
     const ruler = context.ruler;
     const validator = context.validator;
-    ruler.keywords = {
+    const defaultKeywords = {
       email: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
       required: (value) => !isEmpty(value),
       maxlength: (value, param) => value.length <= param,
@@ -21,6 +24,8 @@ const DefaultRulerKeywordPlugin: Plugin = {
         return refField.value === value;
       }
     };
+
+    ruler.keywords = isUndefined(opts) ? defaultKeywords : merge({}, defaultKeywords, opts);
   }
 };
 

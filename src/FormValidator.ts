@@ -5,7 +5,6 @@ import isString from 'lodash/isString';
 import isRegExp from 'lodash/isRegExp';
 import isFunction from 'lodash/isFunction';
 import FormValidationRuler, { Rule, RuleHandleFunction, RuleHandler } from "./FormValidationRuler";
-import DefaultRulerKeywordPlugin from "./plugins/default_keywords";
 
 interface RuleConfigureObject {
   name?: string;
@@ -103,9 +102,6 @@ class FormValidator {
     if (isUndefined(pluginConfigures)) {
       pluginConfigures = [];
     }
-
-    // unshift default plugins
-    pluginConfigures.unshift({ plugin: DefaultRulerKeywordPlugin });
 
     // setup plugins
     pluginConfigures.forEach(configure => configure.plugin.setup(this.getPluginContext(), configure.opts));

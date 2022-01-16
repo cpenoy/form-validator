@@ -1,16 +1,18 @@
 import FormValidator from "./src/FormValidator";
-import AutoControlsPlugin from "./src/plugins/auto_controls";
+import DefaultAutoControlsPlugin from "./src/plugins/auto_controls";
+import DefaultRulerKeywordPlugin from "./src/plugins/ruler_keywords";
 
 const validator = new FormValidator({
     username: [
         'required',
         ['minlength', 6],
-        ['maxlength', 12]
+        ['maxlength', 12],
     ],
     password: [
         'required',
         ['minlength', 6],
-        ['maxlength', 12]
+        ['maxlength', 12],
+        'uppercaseinfirst'
     ],
     password2: [
         'required',
@@ -28,10 +30,16 @@ const validator = new FormValidator({
     ]
 }, [
     {
-        plugin: AutoControlsPlugin,
+        plugin: DefaultAutoControlsPlugin,
         opts: {
             form: document.querySelector('form'),
             selector: 'input'
+        }
+    },
+    {
+        plugin: DefaultRulerKeywordPlugin,
+        opts: {
+            uppercaseinfirst: /^[A-Z]/
         }
     }
 ]);
@@ -40,12 +48,13 @@ const message = {
     username: {
         required: '用户名不能为空',
         minlength: '用户名长度不能小于6',
-        maxlength: '用户名长度不能大于12'
+        maxlength: '用户名长度不能大于12',
     },
     password: {
         required: '密码不能为空',
         minlength: '密码长度不能小于6',
-        maxlength: '密码长度不能大于12'
+        maxlength: '密码长度不能大于12',
+        uppercaseinfirst: '密码要以大写字母开头'
     },
     password2: {
         required: '密码不能为空',
