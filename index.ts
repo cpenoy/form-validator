@@ -1,17 +1,16 @@
 import FormValidator from "./src/FormValidator";
 import AutoControlsPlugin from "./src/plugins/auto_controls";
 
-// const controls = document.querySelectorAll('input');
 const validator = new FormValidator({
-    username: (value) => /[a-zA-Z]/.test(value),
+    username: [
+        'required',
+        ['minlength', 6],
+        ['maxlength', 12]
+    ],
     password: [
         'required',
-        ['minlength', 12],
-        {
-            handler: 'maxlength',
-            param: 6
-        },
-        [(value, param) => param.test(value), /^[a-zA-Z]/]
+        ['minlength', 6],
+        ['maxlength', 12]
     ],
     password2: [
         'required',
@@ -37,9 +36,46 @@ const validator = new FormValidator({
     }
 ]);
 const button = document.getElementById('submit');
+const message = {
+    username: {
+        required: '用户名不能为空',
+        minlength: '用户名长度不能小于6',
+        maxlength: '用户名长度不能大于12'
+    },
+    password: {
+        required: '密码不能为空',
+        minlength: '密码长度不能小于6',
+        maxlength: '密码长度不能大于12'
+    },
+    password2: {
+        required: '密码不能为空',
+        equalToPassword: '前后密码不一致'
+    },
+    email: {
+        email: '邮箱不合法'
+    }
+};
 button.addEventListener('click', (e) => {
     e.preventDefault();
-    validator.validate(console.log);
+    const result = validator.validate();
+    result.forEach(r => {
+        const inputWrapper = document.querySelector(`[name=${r.name}]`).parentElement;
+        const small = inputWrapper.querySelector('small');
+        if (r.allPassed) {
+            if (!inputWrapper.classList.contains('success')) {
+                inputWrapper.classList.add('success');
+            }
+            if (inputWrapper.classList.contains('fail')) {
+                inputWrapper.classList.remove('fail');
+            }
+        } else {
+            if (inputWrapper.classList.contains('success')) {
+                inputWrapper.classList.remove('success');
+            }
+            if (!inputWrapper.classList.contains('fail')) {
+                inputWrapper.classList.add('fail');
+            }
+            small.textContent = message[r.name][r.noPassedRules[0]];
+        }
+    });
 });
-
-console.log(validator);

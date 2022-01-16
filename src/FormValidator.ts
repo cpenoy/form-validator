@@ -6,7 +6,6 @@ import isRegExp from 'lodash/isRegExp';
 import isFunction from 'lodash/isFunction';
 import FormValidationRuler, { Rule, RuleHandleFunction, RuleHandler } from "./FormValidationRuler";
 import DefaultRulerKeywordPlugin from "./plugins/default_keywords";
-import DefaultDisplayPlugin from './plugins/default_display';
 
 interface RuleConfigureObject {
   name?: string;
@@ -36,7 +35,6 @@ interface PluginContext {
 export interface Plugin {
   name: string;
   setup(context: PluginContext, opts: any);
-  onValidated?(result: ValidationResult[]);
   [key: string]: any;
 }
 
@@ -105,16 +103,12 @@ class FormValidator {
     this.rulesConf = rulesConf;
 
     // unshift default plugins
-    pluginConfigures.unshift(
-      { plugin: DefaultRulerKeywordPlugin },
-      { plugin: DefaultDisplayPlugin }
-    );
+    pluginConfigures.unshift({ plugin: DefaultRulerKeywordPlugin });
 
     // setup plugins
-    pluginConfigures.forEach(configure => configure.plugin.setup({
-      validator: this,
-      ruler: FormValidationRuler
-    }, configure.opts));
+    pluginConfigures.forEach(configure => configure.plugin.setup(this.getPluginContext(), configure.opts));
+
+    this.plugins = pluginConfigures.map(configure => configure.plugin);
   }
 
   /**
@@ -150,7 +144,7 @@ class FormValidator {
         };
       } else if (isArray(confParam)) {
         return {
-          name: ruleName,
+          name: isString(confParam[0]) ? confParam[0] : ruleName,
           handler: confParam[0],
           param: confParam[1]
         };
@@ -168,9 +162,8 @@ class FormValidator {
   /**
    * 验证
    */
-  validate();
-  validate(context: any);
-  validate(cb: ValidatorCallback, context: any);
+  validate(): ValidationResult[];
+  validate(cb: ValidatorCallback, context?: any): void;
   validate(...args) {
     let cb, context = this;
 
@@ -205,14 +198,21 @@ class FormValidator {
 
       if (cb) {
         cb.call(context, result);
+      } else {
+        return result;
       }
-
-      this.plugins.forEach(plugin => {
-        if (plugin.onValidated) {
-          plugin.onValidated.call(context, result);
-        }
-      });
     }
+  }
+
+  getPluginContext() {
+    return {
+      validator: this,
+      ruler: FormValidationRuler
+    };
+  }
+
+  getPlugin(name) {
+    return;
   }
 }
 

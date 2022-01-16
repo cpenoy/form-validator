@@ -1,0 +1,79 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Open Sans", sans-serif;
+}
+
+:root {
+  --success-color: #2ecc71;
+  --fail-color: #e74c3c;
+}
+
+.container {
+  width: 400px;
+  margin: 50px auto 0;
+  box-shadow: 0 2px 10px rgb(0 0 0 / 30%);
+  border-radius: 5px;
+}
+
+form {
+  padding: 30px 40px;
+}
+
+form h2 {
+  margin-top: 0;
+}
+
+.input-group {
+  margin-bottom: 10px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+  text-align: left;
+}
+
+.input-group input {
+  border: 2px solid #f0f0f0;
+  padding: 10px;
+  width: 100%;
+  border-radius: 2px;
+  font-size: 14px;
+  outline: none;
+}
+
+.input-group small {
+  color: var(--fail-color);
+  visibility: hidden;
+}
+
+.input-group.fail input {
+  border-color: var(--fail-color);
+  outline: none;
+  background-color: #fff;
+}
+
+.input-group.success input {
+  border-color: var(--success-color);
+}
+
+.input-group.fail small {
+  visibility: visible;
+}
+
+.input-group.success small {
+  visibility: hidden;
+}
+
+button {
+  width: 100%;
+  margin-top: 20px;
+  min-height: 40px;
+  color: #fff;
+  background-color: #3498db;
+  border: 2px solid #3498db;
+  cursor: pointer;
+}

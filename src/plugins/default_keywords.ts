@@ -1,6 +1,9 @@
 import { Plugin } from '../FormValidator';
 import isEmpty from 'lodash/isEmpty';
 
+/**
+ * 设置默认关键词规则
+ */
 const DefaultRulerKeywordPlugin: Plugin = {
   name: 'DefaultRulerKeywordPlugin',
   setup: function (context, opts) {

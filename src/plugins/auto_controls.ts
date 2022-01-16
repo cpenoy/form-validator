@@ -13,6 +13,7 @@ const defaultOptions = Object.create({
 /**
  * 单例模式
  * 由于是单例，所以其属性是所有表单实例共享的
+ * 自动获取表单控件
  */
 const AutoControlsPlugin: Plugin = {
   name: "AutoControlsPlugin",
