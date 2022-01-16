@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "vite"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "cary-mao",
+  "license": "MIT",
   "devDependencies": {
     "vite": "^2.7.12"
   },
