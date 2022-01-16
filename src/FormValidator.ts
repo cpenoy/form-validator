@@ -1,6 +1,6 @@
 import isUndefined from 'lodash/isUndefined';
 import isArray from 'lodash/isArray';
-import isArrayLike from 'lodash/isArrayLike';
+import isPlainObject from 'lodash/isPlainObject';
 import isString from 'lodash/isString';
 import isRegExp from 'lodash/isRegExp';
 import isFunction from 'lodash/isFunction';
@@ -77,22 +77,20 @@ class FormValidator {
    */
   pluginData: PluginData = {};
 
-  constructor(controls: ValidationControl[], rulesConfParam?: RulesConfigureParam, pluginConfigures?: PluginConfigure[]);
-  constructor(rulesConfParam?: RulesConfigureParam, pluginConfigures?: PluginConfigure[]);
+  constructor(controls: ValidationControl[] | NodeList, rulesConfParam: RulesConfigureParam, pluginConfigures?: PluginConfigure[]);
+  constructor(rulesConfParam: RulesConfigureParam, pluginConfigures?: PluginConfigure[]);
   constructor(...args) {
-    // 初始化
-    let controls: ValidationControl[] = [];
-    let rulesConfParam: RulesConfigureParam = {};
-    let pluginConfigures: PluginConfigure[] = [];
+    let controls: ValidationControl[],
+      rulesConfParam: RulesConfigureParam,
+      pluginConfigures: PluginConfigure[];
 
-    // 如果第一个参数是类数组，那么就是第一个函数签名
-    if (isArrayLike(args[0])) {
-      controls = [].slice.call(args[0]);
-      rulesConfParam = args[1];
-      pluginConfigures = args[2];
-    } else {
+    if (isPlainObject(args[0])) {
       rulesConfParam = args[0];
       pluginConfigures = args[1];
+    } else {
+      controls = isArray(args[0]) ? args[0] : [].slice.call(args[0]);
+      rulesConfParam = args[1];
+      pluginConfigures = args[2];
     }
 
     // 解析rulesConf, mutation
@@ -101,6 +99,10 @@ class FormValidator {
     this.controls = controls;
     this.rulesConfParam = rulesConfParam;
     this.rulesConf = rulesConf;
+
+    if (isUndefined(pluginConfigures)) {
+      pluginConfigures = [];
+    }
 
     // unshift default plugins
     pluginConfigures.unshift({ plugin: DefaultRulerKeywordPlugin });
@@ -163,11 +165,11 @@ class FormValidator {
    * 验证
    */
   validate(): ValidationResult[];
-  validate(cb: ValidatorCallback, context?: any): void;
+  validate(cb: ValidatorCallback, context?: any): ValidationResult[];
   validate(...args) {
     let cb, context = this;
 
-    if (isUndefined(args[0]) && !isFunction(args[0])) {
+    if (!isUndefined(args[0]) && !isFunction(args[0])) {
       context = args[0];
     }
 
@@ -202,6 +204,10 @@ class FormValidator {
         return result;
       }
     }
+
+    console.warn('未设置controls，验证器不生效。请在初始化实例时使用构造函数或AutoControlsPlugin设置');
+
+    return [];
   }
 
   getPluginContext() {
@@ -209,10 +215,6 @@ class FormValidator {
       validator: this,
       ruler: FormValidationRuler
     };
-  }
-
-  getPlugin(name) {
-    return;
   }
 }
 
