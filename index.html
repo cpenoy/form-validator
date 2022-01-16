@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FormValidator</title>
+  </head>
+  <body>
+    <div class="container">
+      <form id="form">
+        <h2>Register With Us</h2>
+        <div class="input-group">
+          <label for="username">用户名</label>
+          <input type="text" name="username" placeholder="Enter username" />
+          <small>输入文本不合法！</small>
+        </div>
+        <div class="input-group">
+          <label for="email">邮箱</label>
+          <input type="text" name="email" placeholder="Enter email" />
+          <small>输入文本不合法！</small>
+        </div>
+        <div class="input-group">
+          <label for="password">密码</label>
+          <input type="password" name="password" placeholder="Enter password" />
+          <small>输入文本不合法！</small>
+        </div>
+        <div class="input-group">
+          <label for="password">确认密码</label>
+          <input
+            type="password"
+            name="password2"
+            placeholder="Enter password again"
+          />
+          <small>输入文本不合法！</small>
+        </div>
+
+        <button type="button" id="submit">submit</button>
+      </form>
+    </div>
+    <script src="./src/FormValidator.ts" type="module"></script>
+    <script src="./index.ts" type="module"></script>
+  </body>
+</html>
